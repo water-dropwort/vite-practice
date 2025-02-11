@@ -1,18 +1,27 @@
 import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
 import "./App.css";
 import "@reduxjs/toolkit";
 import { Counter } from "./features/counter/Counter";
-import { useGetPokemonByNameQuery } from "./services/pokemon";
+import { useLazyGetPokemonByNameQuery } from "./services/pokemon";
 
 function App() {
-	const [count, setCount] = useState(0);
-	const { data, error, isLoading } = useGetPokemonByNameQuery("bulbasaur");
+	const [pokemonName, setPokemonName] = useState("");
+	const [trigger, { data, error, isLoading }] = useLazyGetPokemonByNameQuery();
 
 	return (
 		<>
 			<Counter />
+			<input type="text" onChange={(e) => setPokemonName(e.target.value)} />
+			<button
+				type="button"
+				onClick={() => {
+					if (pokemonName.trim()) {
+						trigger(pokemonName);
+					}
+				}}
+			>
+				Search Pokemon
+			</button>
 			{error ? (
 				<>Oh no, there was an error</>
 			) : isLoading ? (
