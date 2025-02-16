@@ -18,6 +18,10 @@ jobs:
         run: |
           cd my-vite-proj
           npm ci
+      - name: Print process.env
+        run: |
+          cd my-vite-proj
+          npm run print-env
       - name: Run Vitest
         run: |
           cd my-vite-proj
