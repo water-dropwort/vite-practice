@@ -25,6 +25,5 @@ jobs:
       - name: Run Vitest
         run: |
           cd my-vite-proj
-          export CI=false
           npm run test
 
