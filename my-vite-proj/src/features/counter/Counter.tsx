@@ -1,5 +1,3 @@
-import React from "react";
-import type { RootState } from "../../app/store";
 import { useAppSelector, useAppDispatch } from "../../app/hooks";
 import { decrement, increment } from "./counterSlice";
 
