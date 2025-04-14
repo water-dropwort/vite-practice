@@ -13,7 +13,8 @@
 		"coverage": "vitest --coverage",
 		"test:changed": "vitest --changed true",
 		"test:runmode": "vitest run",
-        "test:singleThread": "vitest run --poolOptions.threads.singleThread true"
+		"test:singleThread": "vitest run --poolOptions.threads.singleThread true",
+		"test:changed:lastcommit": "vitest --changed HEAD~1"
 	},
 	"dependencies": {
 		"@reduxjs/toolkit": "^2.5.1",
