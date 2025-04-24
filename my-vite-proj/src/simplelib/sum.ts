@@ -3,5 +3,5 @@ export function sum(a: number, b: number) {
 }
 
 export function sumThree(a: number, b: number, c: number) {
-	return sum(a, sum(b, a));
+	return sum(sum(a, b), sum(b, c));
 }
