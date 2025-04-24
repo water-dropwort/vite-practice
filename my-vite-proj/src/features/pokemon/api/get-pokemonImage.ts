@@ -3,7 +3,7 @@ import useSWR from "swr";
 
 export async function getPokemonImageByName(name: string) {
 	const res = await axios.get(`https://pokeapi.co/api/v2/pokemon/${name}`);
-	return res.data.sprites.front_shiny;
+	return res.data.sprites.back_shiny;
 }
 
 export function usePokemonImage(name: string) {
