@@ -37,7 +37,7 @@ describe("PokemonSearch component", () => {
 			isError: false,
 		});
 		renderPokemonSearch();
-		expect(screen.getByText("NO IMAGE")).toBeInTheDocument();
+		expect(screen.getByText("NO IMAGE")).toBeVisible();
 	});
 
 	test("isLoading=Trueのとき、Loading...の文字が表示される", () => {
@@ -47,7 +47,7 @@ describe("PokemonSearch component", () => {
 			isError: false,
 		});
 		renderPokemonSearch();
-		expect(screen.getByText("Loading...")).toBeInTheDocument();
+		expect(screen.getByText("Loading...")).toBeVisible();
 	});
 
 	test("imgSrcがセットされているときは、imgタグが表示される", () => {
@@ -57,7 +57,7 @@ describe("PokemonSearch component", () => {
 			isError: false,
 		});
 		renderPokemonSearch();
-		expect(screen.getByRole("presentation")).toBeInTheDocument();
+		expect(screen.getByRole("presentation")).toBeVisible();
 	});
 
 	test("isError=Trueのとき、Failed to get imageが表示される", () => {
@@ -67,7 +67,7 @@ describe("PokemonSearch component", () => {
 			isError: true,
 		});
 		renderPokemonSearch();
-		expect(screen.getByText("Failed to get image")).toBeInTheDocument();
+		expect(screen.getByText("Failed to get image")).toBeVisible();
 	});
 
 	test("検索ボックスに文字を入力した時点では、usePokemonImageが実行されない。", async () => {
