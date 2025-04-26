@@ -30,71 +30,108 @@ describe("PokemonSearch component", () => {
 		mockedUsePokemonImage.mockClear();
 	});
 
-	test("初期表示時、NO IMAGEの文字が表示されている", () => {
-		mockedUsePokemonImage.mockReturnValue({
-			imgSrc: undefined,
-			isLoading: false,
-			isError: false,
+	describe("読み込み中のとき", () => {
+		test("「Loading...」の文字が表示される", () => {
+			// Arrange
+			mockedUsePokemonImage.mockReturnValue({
+				imgSrc: undefined,
+				isLoading: true,
+				isError: false,
+			});
+			// Act
+			renderPokemonSearch();
+			// Assert
+			expect(screen.getByText("Loading...")).toBeVisible();
 		});
-		renderPokemonSearch();
-		expect(screen.getByText("NO IMAGE")).toBeVisible();
 	});
 
-	test("isLoading=Trueのとき、Loading...の文字が表示される", () => {
-		mockedUsePokemonImage.mockReturnValue({
-			imgSrc: "",
-			isLoading: true,
-			isError: false,
+	describe("エラーが発生しているとき", () => {
+		test("「Failed to get image」が表示される", () => {
+			// Arrange
+			mockedUsePokemonImage.mockReturnValue({
+				imgSrc: undefined,
+				isLoading: false,
+				isError: true,
+			});
+			// Act
+			renderPokemonSearch();
+			// Assert
+			expect(screen.getByText("Failed to get image")).toBeVisible();
 		});
-		renderPokemonSearch();
-		expect(screen.getByText("Loading...")).toBeVisible();
 	});
 
-	test("imgSrcがセットされているときは、imgタグが表示される", () => {
-		mockedUsePokemonImage.mockReturnValue({
-			imgSrc: "testurl",
-			isLoading: false,
-			isError: false,
+	describe("画像のURLが存在しないとき、", () => {
+		test("「NO IMAGE」の文字が表示されている", () => {
+			// Arrange
+			mockedUsePokemonImage.mockReturnValue({
+				imgSrc: undefined,
+				isLoading: false,
+				isError: false,
+			});
+			// Act
+			renderPokemonSearch();
+			// Assert
+			expect(screen.getByText("NO IMAGE")).toBeVisible();
 		});
-		renderPokemonSearch();
-		expect(screen.getByRole("presentation")).toBeVisible();
 	});
 
-	test("isError=Trueのとき、Failed to get imageが表示される", () => {
-		mockedUsePokemonImage.mockReturnValue({
-			imgSrc: null,
-			isLoading: false,
-			isError: true,
+	describe("画像のURLが存在するとき、", () => {
+		test("そのURLがsrc属性に設定されたimgタグが表示される", () => {
+			// Arrange
+			const TESTURL = "TESTURL";
+			mockedUsePokemonImage.mockReturnValue({
+				imgSrc: TESTURL,
+				isLoading: false,
+				isError: false,
+			});
+			// Act
+			renderPokemonSearch();
+			// Assert
+			const pokemonImg = screen.getByLabelText("pokemon-image");
+			expect(pokemonImg).toBeVisible();
+			expect(pokemonImg).toHaveAttribute("src", TESTURL);
 		});
-		renderPokemonSearch();
-		expect(screen.getByText("Failed to get image")).toBeVisible();
 	});
 
-	test("検索ボックスに文字を入力した時点では、usePokemonImageが実行されない。", async () => {
-		mockedUsePokemonImage.mockReturnValue({
-			imgSrc: null,
-			isLoading: false,
-			isError: false,
-		});
-		const user = userEvent.setup();
-		renderPokemonSearch();
-		const INPUTTEXT = "pikachu";
-		await user.type(screen.getByLabelText("pokemon-search-input"), INPUTTEXT);
-		expect(mockedUsePokemonImage).not.toBeCalledWith(INPUTTEXT);
-	});
-
-	test("Searchボタンを押下すると、検索ボックスに入力した内容でusePokemonImageが実行される", async () => {
-		mockedUsePokemonImage.mockReturnValue({
-			imgSrc: null,
-			isLoading: false,
-			isError: false,
+	describe("検索ボックスにポケモンの名前を入力して、Searchボタンをクリックすると", () => {
+		test("入力された情報でusePokemonImageが呼び出される", async () => {
+			// Arrange
+			const TESTINPUTTEXT = "pikachu";
+			const user = userEvent.setup();
+			renderPokemonSearch();
+			mockedUsePokemonImage.mockClear();
+			// Act
+			await user.type(
+				screen.getByLabelText("pokemon-search-input"),
+				TESTINPUTTEXT,
+			);
+			await user.click(screen.getByLabelText("pokemon-search-button"));
+			// Assert
+			expect(mockedUsePokemonImage).toBeCalledTimes(1);
+			expect(mockedUsePokemonImage).toBeCalledWith(TESTINPUTTEXT);
 		});
 
-		const user = userEvent.setup();
-		renderPokemonSearch();
-		const INPUTTEXT = "pikachu";
-		await user.type(screen.getByLabelText("pokemon-search-input"), INPUTTEXT);
-		await user.click(screen.getByLabelText("pokemon-search-button"));
-		expect(mockedUsePokemonImage).toBeCalledWith(INPUTTEXT);
+		test("画像を取得できたときは、imgタグのalt属性に検索ボックスに入力されている内容がセットされる", async () => {
+			// Arrange
+			const TESTINPUTTEXT = "pikachu";
+			const user = userEvent.setup();
+			mockedUsePokemonImage.mockReturnValue({
+				imgSrc: "testimg",
+				isLoading: false,
+				isError: false,
+			});
+			renderPokemonSearch();
+			// Act
+			await user.type(
+				screen.getByLabelText("pokemon-search-input"),
+				TESTINPUTTEXT,
+			);
+			await user.click(screen.getByLabelText("pokemon-search-button"));
+			// Assert
+			expect(screen.getByLabelText("pokemon-image")).toHaveAttribute(
+				"alt",
+				TESTINPUTTEXT,
+			);
+		});
 	});
 });

@@ -10,7 +10,7 @@ function Loading() {
 }
 
 function Success({ imgSrc, alt }: { imgSrc: string; alt: string }) {
-	return <img src={imgSrc} alt={alt}></img>;
+	return <img aria-label="pokemon-image" src={imgSrc} alt={alt}></img>;
 }
 
 function Error({ errorText }: { errorText: string }) {
