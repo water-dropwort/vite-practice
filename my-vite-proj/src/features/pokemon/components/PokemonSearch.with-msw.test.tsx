@@ -1,12 +1,4 @@
-import {
-	describe,
-	test,
-	expect,
-	beforeAll,
-	afterAll,
-	afterEach,
-	beforeEach,
-} from "vitest";
+import { describe, test, expect, beforeAll, afterAll, afterEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { PokemonSearch } from "./PokemonSearch";
