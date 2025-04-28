@@ -14,7 +14,7 @@ function Success({ imgSrc, alt }: { imgSrc: string; alt: string }) {
 }
 
 function Error({ errorText }: { errorText: string }) {
-	return <span>{errorText}</span>;
+	return <span aria-label="pokemon-errormessage">{errorText}</span>;
 }
 
 export function PokemonSearch() {
