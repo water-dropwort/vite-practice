@@ -1,8 +1,12 @@
 import axios from "axios";
 import useSWR from "swr";
 
+export function buildURL(name: string) {
+	return import.meta.env.VITE_POKEAPI_BASE_URL + `${name}`;
+}
+
 export async function getPokemonImageByName(name: string) {
-	const res = await axios.get(`https://pokeapi.co/api/v2/pokemon/${name}`);
+	const res = await axios.get(buildURL(name));
 	return res.data.sprites.front_shiny;
 }
 

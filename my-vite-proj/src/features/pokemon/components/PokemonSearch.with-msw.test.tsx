@@ -13,15 +13,12 @@ import { PokemonSearch } from "./PokemonSearch";
 import { http, HttpResponse } from "msw";
 import { setupServer } from "msw/node";
 import { SWRConfig } from "swr";
+import { buildURL } from "../api/get-pokemonImage";
 
 const server = setupServer();
 
 const renderWithNoCache = (ui: React.ReactNode) => {
 	render(<SWRConfig value={{ provider: () => new Map() }}>{ui}</SWRConfig>);
-};
-
-const buildURL = (pokemonName: string) => {
-	return `https://pokeapi.co/api/v2/pokemon/${pokemonName}`;
 };
 
 beforeAll(() => {
